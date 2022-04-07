@@ -31,19 +31,19 @@
 #define QTXLSX_USE_NAMESPACE using namespace QXlsx;
 
 #if !defined(QTXLSX_STATIC)
-#  if defined(QT_BUILD_XLSX_LIB)
-#    define Q_XLSX_EXPORT Q_DECL_EXPORT
-#  else
-#    define Q_XLSX_EXPORT Q_DECL_IMPORT
-#  endif
+#if defined(QT_BUILD_XLSX_LIB)
+#define Q_XLSX_EXPORT Q_DECL_EXPORT
 #else
-#  define Q_XLSX_EXPORT
+#define Q_XLSX_EXPORT Q_DECL_IMPORT
+#endif
+#else
+#define Q_XLSX_EXPORT
 #endif
 
 #ifdef XLSX_TEST
-#  define XLSX_AUTOTEST_EXPORT Q_XLSX_EXPORT
+#define XLSX_AUTOTEST_EXPORT Q_XLSX_EXPORT
 #else
-#  define XLSX_AUTOTEST_EXPORT
+#define XLSX_AUTOTEST_EXPORT
 #endif
 
 #endif // XLSXGLOBAL_H
