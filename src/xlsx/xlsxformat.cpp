@@ -34,32 +34,52 @@ QT_BEGIN_NAMESPACE_XLSX
 
 FormatPrivate::FormatPrivate()
     : dirty(true)
-    , font_dirty(true), font_index_valid(false), font_index(0)
-    , fill_dirty(true), fill_index_valid(false), fill_index(0)
-    , border_dirty(true), border_index_valid(false), border_index(0)
-    , xf_index(-1), xf_indexValid(false)
-    , is_dxf_fomat(false), dxf_index(-1), dxf_indexValid(false)
+    , font_dirty(true)
+    , font_index_valid(false)
+    , font_index(0)
+    , fill_dirty(true)
+    , fill_index_valid(false)
+    , fill_index(0)
+    , border_dirty(true)
+    , border_index_valid(false)
+    , border_index(0)
+    , xf_index(-1)
+    , xf_indexValid(false)
+    , is_dxf_fomat(false)
+    , dxf_index(-1)
+    , dxf_indexValid(false)
     , theme(0)
 {
 }
 
 FormatPrivate::FormatPrivate(const FormatPrivate &other)
     : QSharedData(other)
-    , dirty(other.dirty), formatKey(other.formatKey)
-    , font_dirty(other.font_dirty), font_index_valid(other.font_index_valid), font_key(other.font_key), font_index(other.font_index)
-    , fill_dirty(other.fill_dirty), fill_index_valid(other.fill_index_valid), fill_key(other.fill_key), fill_index(other.fill_index)
-    , border_dirty(other.border_dirty), border_index_valid(other.border_index_valid), border_key(other.border_key), border_index(other.border_index)
-    , xf_index(other.xf_index), xf_indexValid(other.xf_indexValid)
-    , is_dxf_fomat(other.is_dxf_fomat), dxf_index(other.dxf_index), dxf_indexValid(other.dxf_indexValid)
+    , dirty(other.dirty)
+    , formatKey(other.formatKey)
+    , font_dirty(other.font_dirty)
+    , font_index_valid(other.font_index_valid)
+    , font_key(other.font_key)
+    , font_index(other.font_index)
+    , fill_dirty(other.fill_dirty)
+    , fill_index_valid(other.fill_index_valid)
+    , fill_key(other.fill_key)
+    , fill_index(other.fill_index)
+    , border_dirty(other.border_dirty)
+    , border_index_valid(other.border_index_valid)
+    , border_key(other.border_key)
+    , border_index(other.border_index)
+    , xf_index(other.xf_index)
+    , xf_indexValid(other.xf_indexValid)
+    , is_dxf_fomat(other.is_dxf_fomat)
+    , dxf_index(other.dxf_index)
+    , dxf_indexValid(other.dxf_indexValid)
     , theme(other.theme)
     , properties(other.properties)
 {
-
 }
 
 FormatPrivate::~FormatPrivate()
 {
-
 }
 
 /*!
@@ -77,7 +97,6 @@ FormatPrivate::~FormatPrivate()
  * \value FontScriptSuper super script
  * \value FontScriptSub sub script
  */
-
 
 /*!
  * \enum Format::FontUnderline
@@ -137,7 +156,7 @@ FormatPrivate::~FormatPrivate()
  * \value BorderDashDotDot
  * \value BorderMediumDashDotDot
  * \value BorderSlantDashDot
-*/
+ */
 
 /*!
  * \enum Format::DiagonalBorderType
@@ -181,23 +200,22 @@ FormatPrivate::~FormatPrivate()
  */
 Format::Format()
 {
-    //The d pointer is initialized with a null pointer
+    // The d pointer is initialized with a null pointer
 }
 
 /*!
    Creates a new format with the same attributes as the \a other format.
  */
 Format::Format(const Format &other)
-    :d(other.d)
+    : d(other.d)
 {
-
 }
 
 /*!
    Assigns the \a other format to this format, and returns a
    reference to this format.
  */
-Format &Format::operator =(const Format &other)
+Format &Format::operator=(const Format &other)
 {
     d = other.d;
     return *this;
@@ -248,7 +266,7 @@ void Format::setNumberFormat(const QString &format)
     if (format.isEmpty())
         return;
     setProperty(FormatPrivate::P_NumFmt_FormatCode, format);
-    clearProperty(FormatPrivate::P_NumFmt_Id); //numFmt id must be re-generated.
+    clearProperty(FormatPrivate::P_NumFmt_Id); // numFmt id must be re-generated.
 }
 
 /*!
@@ -257,18 +275,18 @@ void Format::setNumberFormat(const QString &format)
 bool Format::isDateTimeFormat() const
 {
     if (hasProperty(FormatPrivate::P_NumFmt_FormatCode)) {
-        //Custom numFmt, so
-        //Gauss from the number string
+        // Custom numFmt, so
+        // Gauss from the number string
         return NumFormatParser::isDateTime(numberFormat());
-    } else if (hasProperty(FormatPrivate::P_NumFmt_Id)){
-        //Non-custom numFmt
+    } else if (hasProperty(FormatPrivate::P_NumFmt_Id)) {
+        // Non-custom numFmt
         int idx = numberFormatIndex();
 
-        //Is built-in date time number id?
+        // Is built-in date time number id?
         if ((idx >= 14 && idx <= 22) || (idx >= 45 && idx <= 47))
             return true;
 
-        if ((idx >= 27 && idx <= 36) || (idx >= 50 && idx <= 58)) //Used in CHS\CHT\JPN\KOR
+        if ((idx >= 27 && idx <= 36) || (idx >= 50 && idx <= 58)) // Used in CHS\CHT\JPN\KOR
             return true;
     }
 
@@ -305,7 +323,7 @@ bool Format::hasNumFmtData() const
         return false;
 
     if (hasProperty(FormatPrivate::P_NumFmt_Id)
-            || hasProperty(FormatPrivate::P_NumFmt_FormatCode)) {
+        || hasProperty(FormatPrivate::P_NumFmt_FormatCode)) {
         return true;
     }
     return false;
@@ -462,15 +480,15 @@ void Format::setFontName(const QString &name)
  */
 QFont Format::font() const
 {
-   QFont font;
-   font.setFamily(fontName());
-   if (fontSize() > 0)
-       font.setPointSize(fontSize());
-   font.setBold(fontBold());
-   font.setItalic(fontItalic());
-   font.setUnderline(fontUnderline()!=FontUnderlineNone);
-   font.setStrikeOut(fontStrikeOut());
-   return font;
+    QFont font;
+    font.setFamily(fontName());
+    if (fontSize() > 0)
+        font.setPointSize(fontSize());
+    font.setBold(fontBold());
+    font.setItalic(fontItalic());
+    font.setUnderline(fontUnderline() != FontUnderlineNone);
+    font.setStrikeOut(fontStrikeOut());
+    return font;
 }
 
 /*!
@@ -530,13 +548,13 @@ QByteArray Format::fontKey() const
     if (d->font_dirty) {
         QByteArray key;
         QDataStream stream(&key, QIODevice::WriteOnly);
-        for (int i=FormatPrivate::P_Font_STARTID; i<FormatPrivate::P_Font_ENDID; ++i) {
+        for (int i = FormatPrivate::P_Font_STARTID; i < FormatPrivate::P_Font_ENDID; ++i) {
             if (d->properties.contains(i))
                 stream << i << d->properties[i];
         };
 
-        const_cast<Format*>(this)->d->font_key = key;
-        const_cast<Format*>(this)->d->font_dirty = false;
+        const_cast<Format *>(this)->d->font_key = key;
+        const_cast<Format *>(this)->d->font_dirty = false;
     }
 
     return d->font_key;
@@ -551,7 +569,7 @@ bool Format::hasFontData() const
     if (!d)
         return false;
 
-    for (int i=FormatPrivate::P_Font_STARTID; i<FormatPrivate::P_Font_ENDID; ++i) {
+    for (int i = FormatPrivate::P_Font_STARTID; i < FormatPrivate::P_Font_ENDID; ++i) {
         if (hasProperty(i))
             return true;
     }
@@ -563,7 +581,8 @@ bool Format::hasFontData() const
  */
 Format::HorizontalAlignment Format::horizontalAlignment() const
 {
-    return static_cast<Format::HorizontalAlignment>(intProperty(FormatPrivate::P_Alignment_AlignH, AlignHGeneral));
+    return static_cast<Format::HorizontalAlignment>(
+        intProperty(FormatPrivate::P_Alignment_AlignH, AlignHGeneral));
 }
 
 /*!
@@ -572,12 +591,13 @@ Format::HorizontalAlignment Format::horizontalAlignment() const
 void Format::setHorizontalAlignment(HorizontalAlignment align)
 {
     if (hasProperty(FormatPrivate::P_Alignment_Indent)
-            &&(align != AlignHGeneral && align != AlignLeft && align != AlignRight && align != AlignHDistributed)) {
+        && (align != AlignHGeneral && align != AlignLeft && align != AlignRight
+            && align != AlignHDistributed)) {
         clearProperty(FormatPrivate::P_Alignment_Indent);
     }
 
     if (hasProperty(FormatPrivate::P_Alignment_ShinkToFit)
-            && (align == AlignHFill || align == AlignHJustify || align == AlignHDistributed)) {
+        && (align == AlignHFill || align == AlignHJustify || align == AlignHDistributed)) {
         clearProperty(FormatPrivate::P_Alignment_ShinkToFit);
     }
 
@@ -589,7 +609,8 @@ void Format::setHorizontalAlignment(HorizontalAlignment align)
  */
 Format::VerticalAlignment Format::verticalAlignment() const
 {
-    return static_cast<Format::VerticalAlignment>(intProperty(FormatPrivate::P_Alignment_AlignV, AlignBottom));
+    return static_cast<Format::VerticalAlignment>(
+        intProperty(FormatPrivate::P_Alignment_AlignV, AlignBottom));
 }
 
 /*!
@@ -651,7 +672,7 @@ void Format::setIndent(int indent)
     if (indent && hasProperty(FormatPrivate::P_Alignment_AlignH)) {
         HorizontalAlignment hl = horizontalAlignment();
 
-        if (hl != AlignHGeneral && hl != AlignLeft && hl!= AlignRight && hl!= AlignHJustify) {
+        if (hl != AlignHGeneral && hl != AlignLeft && hl != AlignRight && hl != AlignHJustify) {
             setHorizontalAlignment(AlignLeft);
         }
     }
@@ -692,7 +713,7 @@ bool Format::hasAlignmentData() const
     if (!d)
         return false;
 
-    for (int i=FormatPrivate::P_Alignment_STARTID; i<FormatPrivate::P_Alignment_ENDID; ++i) {
+    for (int i = FormatPrivate::P_Alignment_STARTID; i < FormatPrivate::P_Alignment_ENDID; ++i) {
         if (hasProperty(i))
             return true;
     }
@@ -938,13 +959,13 @@ QByteArray Format::borderKey() const
     if (d->border_dirty) {
         QByteArray key;
         QDataStream stream(&key, QIODevice::WriteOnly);
-        for (int i=FormatPrivate::P_Border_STARTID; i<FormatPrivate::P_Border_ENDID; ++i) {
+        for (int i = FormatPrivate::P_Border_STARTID; i < FormatPrivate::P_Border_ENDID; ++i) {
             if (d->properties.contains(i))
                 stream << i << d->properties[i];
         };
 
-        const_cast<Format*>(this)->d->border_key = key;
-        const_cast<Format*>(this)->d->border_dirty = false;
+        const_cast<Format *>(this)->d->border_key = key;
+        const_cast<Format *>(this)->d->border_dirty = false;
     }
 
     return d->border_key;
@@ -959,7 +980,7 @@ bool Format::hasBorderData() const
     if (!d)
         return false;
 
-    for (int i=FormatPrivate::P_Border_STARTID; i<FormatPrivate::P_Border_ENDID; ++i) {
+    for (int i = FormatPrivate::P_Border_STARTID; i < FormatPrivate::P_Border_ENDID; ++i) {
         if (hasProperty(i))
             return true;
     }
@@ -1058,13 +1079,13 @@ QByteArray Format::fillKey() const
     if (d->fill_dirty) {
         QByteArray key;
         QDataStream stream(&key, QIODevice::WriteOnly);
-        for (int i=FormatPrivate::P_Fill_STARTID; i<FormatPrivate::P_Fill_ENDID; ++i) {
+        for (int i = FormatPrivate::P_Fill_STARTID; i < FormatPrivate::P_Fill_ENDID; ++i) {
             if (d->properties.contains(i))
                 stream << i << d->properties[i];
         };
 
-        const_cast<Format*>(this)->d->fill_key = key;
-        const_cast<Format*>(this)->d->fill_dirty = false;
+        const_cast<Format *>(this)->d->fill_key = key;
+        const_cast<Format *>(this)->d->fill_dirty = false;
     }
 
     return d->fill_key;
@@ -1079,7 +1100,7 @@ bool Format::hasFillData() const
     if (!d)
         return false;
 
-    for (int i=FormatPrivate::P_Fill_STARTID; i<FormatPrivate::P_Fill_ENDID; ++i) {
+    for (int i = FormatPrivate::P_Fill_STARTID; i < FormatPrivate::P_Fill_ENDID; ++i) {
         if (hasProperty(i))
             return true;
     }
@@ -1127,8 +1148,7 @@ bool Format::hasProtectionData() const
     if (!d)
         return false;
 
-    if (hasProperty(FormatPrivate::P_Protection_Hidden
-            || FormatPrivate::P_Protection_Locked)) {
+    if (hasProperty(FormatPrivate::P_Protection_Hidden || FormatPrivate::P_Protection_Locked)) {
         return true;
     }
     return false;
@@ -1148,7 +1168,7 @@ void Format::mergeFormat(const Format &modifier)
     }
 
     QMapIterator<int, QVariant> it(modifier.d->properties);
-    while(it.hasNext()) {
+    while (it.hasNext()) {
         it.next();
         setProperty(it.key(), it.value());
     }
@@ -1189,7 +1209,7 @@ QByteArray Format::formatKey() const
         QMapIterator<int, QVariant> i(d->properties);
         while (i.hasNext()) {
             i.next();
-            stream<<i.key()<<i.value();
+            stream << i.key() << i.value();
         }
 
         d->formatKey = key;
@@ -1268,7 +1288,7 @@ bool Format::dxfIndexValid() const
 /*!
     Returns ture if the \a format is equal to this format.
 */
-bool Format::operator ==(const Format &format) const
+bool Format::operator==(const Format &format) const
 {
     return this->formatKey() == format.formatKey();
 }
@@ -1276,7 +1296,7 @@ bool Format::operator ==(const Format &format) const
 /*!
     Returns ture if the \a format is not equal to this format.
 */
-bool Format::operator !=(const Format &format) const
+bool Format::operator!=(const Format &format) const
 {
     return this->formatKey() != format.formatKey();
 }
@@ -1299,7 +1319,8 @@ QVariant Format::property(int propertyId, const QVariant &defaultValue) const
 /*!
  * \internal
  */
-void Format::setProperty(int propertyId, const QVariant &value, const QVariant &clearValue, bool detach)
+void Format::setProperty(int propertyId, const QVariant &value, const QVariant &clearValue,
+                         bool detach)
 {
     if (!d)
         d = new FormatPrivate;
@@ -1325,10 +1346,12 @@ void Format::setProperty(int propertyId, const QVariant &value, const QVariant &
     if (propertyId >= FormatPrivate::P_Font_STARTID && propertyId < FormatPrivate::P_Font_ENDID) {
         d->font_dirty = true;
         d->font_index_valid = false;
-    } else if (propertyId >= FormatPrivate::P_Border_STARTID && propertyId < FormatPrivate::P_Border_ENDID) {
+    } else if (propertyId >= FormatPrivate::P_Border_STARTID
+               && propertyId < FormatPrivate::P_Border_ENDID) {
         d->border_dirty = true;
         d->border_index_valid = false;
-    } else if (propertyId >= FormatPrivate::P_Fill_STARTID && propertyId < FormatPrivate::P_Fill_ENDID) {
+    } else if (propertyId >= FormatPrivate::P_Fill_STARTID
+               && propertyId < FormatPrivate::P_Fill_ENDID) {
         d->fill_dirty = true;
         d->fill_index_valid = false;
     }
