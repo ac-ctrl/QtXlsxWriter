@@ -114,7 +114,9 @@ bool XlsxColor::loadFromXml(QXmlStreamReader &reader)
 
 XlsxColor::operator QVariant() const
 {
-    return QVariant(qMetaTypeId<XlsxColor>(), this);
+    QMetaType xlsx_color_type = QMetaType::fromType<XlsxColor>();
+    return QVariant(xlsx_color_type, this);
+    //return QVariant(qMetaTypeId<XlsxColor>(), this);
 }
 
 
@@ -132,7 +134,9 @@ QColor XlsxColor::fromARGBString(const QString &c)
 QString XlsxColor::toARGBString(const QColor &c)
 {
     QString color;
-    color.sprintf("%02X%02X%02X%02X", c.alpha(), c.red(), c.green(), c.blue());
+    color=QString("%02X%02X%02X%02X").arg(c.alpha(), c.red(), c.green(), c.blue());
+    //QTextStream(&color) << c.alpha() << c.red() << c.green() << c.blue();
+    //color.sprintf("%02X%02X%02X%02X", c.alpha(), c.red(), c.green(), c.blue());
     return color;
 }
 

@@ -136,8 +136,10 @@ bool DocPropsCore::loadFromXmlFile(QIODevice *device)
     while (!reader.atEnd()) {
          QXmlStreamReader::TokenType token = reader.readNext();
          if (token == QXmlStreamReader::StartElement) {
-             const QStringRef nsUri = reader.namespaceUri();
-             const QStringRef name = reader.name();
+             const QStringView nsUri = QStringView{reader.namespaceUri()};
+             const QStringView name = QStringView{reader.name()};
+             //const QStringRef nsUri = reader.namespaceUri();
+             //const QStringRef name = reader.name();
              if (name == QStringLiteral("subject") && nsUri == dc) {
                  setProperty(QStringLiteral("subject"), reader.readElementText());
              } else if (name == QStringLiteral("title") && nsUri == dc) {

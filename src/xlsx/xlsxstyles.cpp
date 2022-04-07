@@ -50,9 +50,11 @@ Styles::Styles(CreateFlag flag)
     //!Fix me! Where should we put these register code?
     if (QMetaType::type("XlsxColor") == QMetaType::UnknownType) {
         qRegisterMetaType<XlsxColor>("XlsxColor");
-        qRegisterMetaTypeStreamOperators<XlsxColor>("XlsxColor");
+#if 0 //TODO: Check if this must be fixed.
+        qRegisterMetaTypeStreamOperators<XlsxColor>("XlsxColor"); //Error
 #if QT_VERSION >= 0x050200
-        QMetaType::registerDebugStreamOperator<XlsxColor>();
+        QMetaType::registerDebugStreamOperator<XlsxColor>();  //Error
+#endif
 #endif
     }
 
